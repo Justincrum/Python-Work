@@ -42,7 +42,7 @@ fig = plt.figure()
 
 
 for i in range(0,6):
-    T=D
+    T=-D
     T=T**i/5
     T = np.diag(T)
     Laps = V.dot(T.dot(LA.inv(V)))
