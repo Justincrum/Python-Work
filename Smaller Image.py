@@ -45,7 +45,7 @@ for i in range(0,6):
     T=D
     T=T**i/5
     T = np.diag(T)
-    Laps = -V.dot(T.dot(LA.inv(V)))
+    Laps = V.dot(T.dot(LA.inv(V)))
     Laps = Laps.real   #The eigenvalue solver is giving a very small imaginary portion, should be zero, as the matrix is symmetric.
     Laps = np.dot(Laps,gray)  #Applying the fractional Laplacian to the grayscale.
     Laps = np.reshape(Laps,(100,100))  
