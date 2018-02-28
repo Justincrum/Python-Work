@@ -6,6 +6,7 @@ Created on Fri Feb 09 09:12:47 2018
 """
 #This code is for applying the fractional laplacian operator to a smaller image.
 import numpy as np
+import scipy as sp
 from numpy import linalg as LA
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
@@ -25,7 +26,7 @@ startTime = datetime.now()
 #imgplt = plt.imshow(gray, cmap = plt.get_cmap('gray_r'))            
             
 
-img=mpimg.imread('stinkbugsmall.png')  #This block reads the image and converts to grayscale.
+img=mpimg.imread('stinkbugssmall.png')  #This block reads the image and converts to grayscale.
 r, g, b =img[:,:,0], img[:,:,1], img[:,:,2]
 gray = 20.0/61*r + 40.0/61*g +1.0/61*b 
 n, m = np.shape(gray) #n rows, m columns
@@ -61,6 +62,11 @@ four[n*m-m]=-2
 diagonals = [four, oneoff, oneoff, off, off]
 Lap = SP.diags(diagonals,[0,1,-1,-m,m]).toarray()
 #Converting the laplacian operator to the eigenvalue decomposition.
+#Z, T = sp.linalg.schur(Lap)
+#Z.flags.writeable = True
+#Z = -Z
+#zero = np.argmin(Z)
+#Z[zero]=0
 D, V = LA.eig(Lap)
 S = -D
 zero = np.argmin(S)
