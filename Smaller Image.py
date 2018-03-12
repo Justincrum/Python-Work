@@ -12,6 +12,9 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from scipy import sparse as SP
 from datetime import datetime
+from PIL import Image
+
+
 
 startTime = datetime.now()
 
@@ -61,29 +64,48 @@ four[n*m-m]=-2
 #Putting the correct 5 diagonals into a vector of diagonals.
 diagonals = [four, oneoff, oneoff, off, off]
 Lap = SP.diags(diagonals,[0,1,-1,-m,m]).toarray()
-#Converting the laplacian operator to the eigenvalue decomposition.
-#Z, T = sp.linalg.schur(Lap)
-#Z.flags.writeable = True
-#Z = -Z
-#zero = np.argmin(Z)
-#Z[zero]=0
-D, V = LA.eig(Lap)
-S = -D
-zero = np.argmin(S)
-S[zero] = 0
+#Converting the laplacian operator to the schur form decomposition.
+Z, Q = sp.linalg.schur(Lap)
+Z.flags.writeable = True
+Z = -Z
+Z= np.diag(Z)
+zero = np.argmin(Z)
+Z.flags.writeable = True
+Z[zero]=0
+C = Q.T
 fig = plt.figure()
-C = LA.inv(V)
+
+
+#General eigenvalue decomp.
+#D, V = LA.eig(Lap)
+#S = -D
+#zero = np.argmin(S)
+#S[zero] = 0
+#fig = plt.figure()
+#C = LA.inv(V)
 #Setting up an array to make a color map.
 fractionals = []
 
 for i in range(0,12):
-    T=S
-    T=T**(i/5.0)
-    T = np.diag(T)
-    Laps = -V.dot(T.dot(C))
+    
+    #This is for using general eigenvalue decomp.
+    #T=S
+    #T=T**(1/5.0)
+    #T = np.diag(T)
+    #Laps = -V.dot(T.dot(C))
+    #Laps = Laps.real   #The eigenvalue solver is giving a very small imaginary portion, should be zero, as the matrix is symmetric.
+    #Laps = np.dot(Laps,gray)  #Applying the fractional Laplacian to the grayscale.
+    #Laps = np.reshape(Laps,(n,m)) 
+    
+    #If I use schur form decomp.
+    S=Z
+    S=S**(i/5.0)
+    S = np.diag(S)
+    Laps = -Q.dot(S.dot(C))
     Laps = Laps.real   #The eigenvalue solver is giving a very small imaginary portion, should be zero, as the matrix is symmetric.
     Laps = np.dot(Laps,gray)  #Applying the fractional Laplacian to the grayscale.
     Laps = np.reshape(Laps,(n,m)) 
+    
     #Storing each of the instances of the fractional laplacian.
     fractionals.append(Laps)
     
@@ -95,7 +117,7 @@ for i in range(0,12):
     nLaps = fractionals[i]
     fig.add_subplot(3,4,i+1)
     #Uncomment one of the next two lines for the code to plot.  The first normalizes.
-    imgplt = plt.imshow(nLaps, cmap = plt.get_cmap('gray_r'),vmin=small, vmax=large) 
+    imgplt = plt.imshow(nLaps, cmap = plt.get_cmap('gray'),vmin=small, vmax=large) 
     #imgplt = plt.imshow(nLaps, cmap = plt.get_cmap('gray_r'))
     #Plotting the images.
 fig.subplots_adjust(right=0.8)
@@ -104,10 +126,4 @@ fig.colorbar(imgplt, cax=cbar_ax)
 
 #The Below works, but is kind of uninspired.
 
-#Laps = -V.dot(S.dot(LA.inv(V)))
-#Laps = Laps.real   #The eigenvalue solver is giving a very small imaginary portion, should be zero, as the matrix is symmetric.
-#Laps = np.dot(Laps,gray)  #Applying the fractional Laplacian to the grayscale.
-#Laps = np.reshape(Laps,(100,100))  
-
-#imgplt = plt.imshow(Laps, cmap = plt.get_cmap('gray'))  #Plotting the image.
 print datetime.now() - startTime
