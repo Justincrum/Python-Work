@@ -1,0 +1,107 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage{amsmath,amssymb,amsfonts,amsthm}
+%\usepackage{mathabx,MnSymbol}
+\usepackage{float,color}
+%\usepackage{graphicx}
+\usepackage[all]{xy}
+\usepackage{enumitem}
+
+% Graphics packages
+\usepackage{color} % black,white,red,green,blue,cyan,magenta,yellow
+\usepackage{ifpdf}
+\ifpdf
+    % PDF Graphics packages
+    \usepackage[pdftex]{graphicx}
+    %\usepackage{pdftricks}
+    %\begin{psinputs}
+    %  \usepackage{pstricks}
+    %\end{psinputs}
+    \usepackage[pdftex]{hyperref}
+    %\usepackage{hyperref}
+    \hypersetup{
+        %bookmarks=true,        % show bookmarks bar?
+        unicode=false,          % non-Latin characters in Acrobat™ bookmarks
+        pdftoolbar=true,        % show Acrobat€ toolbar?
+        pdfmenubar=true,        % show Acrobat menu?
+        pdffitwindow=false,     % window fit to page when opened
+        pdfstartview={FitH},    % fits the width of the page to the window
+%        pdftitle={AKG Article},      % title
+%        pdfauthor={Andrew Gillette},   % author
+%        pdfsubject={Mathematics},    % subject of the document
+%        pdfcreator={Andrew Gillette},  % creator of the document
+%        pdfproducer={Andrew Gillette}, % producer of the document
+        pdfkeywords={math, mathematics}, % list of keywords
+        pdfnewwindow=true,      % links in new window
+        colorlinks=true,        % false: boxed links; true: colored links
+        linkcolor=red,          % color of internal links
+        citecolor=blue,         % color of links to bibliography
+        filecolor=magenta,      % color of file links
+        urlcolor=cyan           % color of external links
+    }
+    \def\myfigpng#1#2{\includegraphics[height=#2]{#1.png}}
+    \def\myfigpdf#1#2{\includegraphics[height=#2]{#1.pdf}}
+    \def\myfigps#1#2{\includegraphics[height=#2]{#1.pdf}}
+    \def\myfig#1#2{\includegraphics[height=#2]{#1.png}}
+    \typeout{====== Invoked by pdflatex ======================}
+\else
+    % DVI Graphics packages
+    \usepackage{graphicx}
+    \usepackage{pstricks}
+    \newenvironment{pdfpic}{}{}
+    \newcommand{\href}[2]{#2}
+    \def\myfigpng#1#2{\includegraphics[height=#2]{#1}} % auto-select .ps/.eps
+    \def\myfigpdf#1#2{\includegraphics[height=#2]{#1}} % auto-select .ps/.eps
+    \def\myfigps#1#2{\includegraphics[height=#2]{#1}}  % auto-select .ps/.eps
+    \def\myfig#1#2{\includegraphics[height=#2]{#1}}    % auto-select .ps/.eps
+    \typeout{====== Invoked by latex ======================}
+\fi
+
+
+%\newcommand{\red}[1]{{\textcolor{red}{\textbf{#1}}}}
+
+%---------------------------------------------------
+
+
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\ldeg}{\textnormal{ldeg}}
+
+
+%-----------------------------------------
+
+%\setlength{\textwidth}{1.1\textwidth}
+
+\numberwithin{equation}{section}
+
+\begin{document}
+\title{Fractional Derivatives for Geometry Processing}
+
+
+\author{Justin Crum, Andrew Gillette and Josh Levine
+\thanks{University of Arizona, Tucson, Arizona, USA}
+}
+
+%\date{}
+
+\maketitle
+
+Some ideas to pursue going forward
+\begin{itemize}
+\item Suppose we have a coarse and fine-grained mesh, e.g. a decimated version of a fine mesh.  Are eigenvalues / vectors preserved at all?  Do fractional operators help pick out key features in the coarse mesh?
+\item If we ``crop'' the eigenvalue spectrum, do we still get useful information from the eigenvalues we keep?
+\item Can fractional eigenvalues/vectors be used for ridge detection in a 2D mesh embedded in 3D?
+\item Compare 1 $h$-step of the regular Laplacian smoothing to 2 $h^{\frac 12}$ steps of a $\frac 12$ Laplacian smoothing. 
+We see that:\\[2mm]
+\begin{tabular}{ll}
+1 $h$ step $\Delta$ & $I+ h\Delta$ \\
+2 $h^{\frac 12}$ steps $\Delta^{\frac 12}$ & $I + h\Delta + 2h^{\frac 12}\Delta^{\frac 12}$
+\end{tabular}\\[2mm]
+The difference is $2h^{\frac 12}\Delta^{\frac 12}$.  What does this encode about the geometry?
+\item Looking at the paper ``Spectral geometry processing with manifold harmonics'' by Vallet and L\'evy (2008) in Google Scholar and searching its ``cited by'' list for the term ``fractional'' turns up few results.  One paper, by Hu, Wang and Qin claims to investigate ``the relationship between Riesz transform and fractional Laplacian operator, which can enable the computation of Riesz transform on surfaces via eigenvalue decomposition of Laplacian matrix.''
+\item This survey article may be a useful read:\\
+What Is the Fractional Laplacian?\\
+\url{https://arxiv.org/abs/1801.09767}
+
+
+\end{itemize}
+
+\end{document}
